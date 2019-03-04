@@ -956,7 +956,7 @@ HTTP return codes commonly used by the API:
     + promotional_inserts (required, boolean) - Add promotional inserts to your order?
     + note (optional, string) - Any notes for the order.
     + items (required, array) -  Array of ordered items.
-        + array
+        + (object)
             + item_id (required, number) - ID of the desired item.
             + quantity (required, number) - Ordered quantity.
             + note (optional, string) - Any notes for this item.
@@ -1087,7 +1087,7 @@ HTTP return codes commonly used by the API:
     + promotional_inserts (optional, boolean) - Add promotional inserts to your order?
     + note (optional, string) - Any notes for the order.
     + items (optional, array) -  Array of ordered items.
-        + array
+        + (object)
             + item_id (optional, number) - ID of the desired item.
             + quantity (optional, number) - Ordered quantity.
             + note (optional, string) - Any notes for this item.
