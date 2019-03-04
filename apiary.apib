@@ -1,80 +1,133 @@
 FORMAT: 1A
-HOST: http://planetexpress.lvh.me/rest
+HOST: https://app.planetexpress.com/rest/v1
 
-# Planet Expresss
+# Planet Expresss RESTful API
 
-Polls is a simple API allowing consumers to view polls and vote in them.
+## URI
 
-## Questions Collection [/questions]
+### Host
 
-### List All Questions [GET]
+Depending on which host you choose, either **sandbox** or **live** API will be contacted.
 
+| Type    | URL                               |
+|---------|-----------------------------------|
+| Sandbox | https://sandbox.planetexpress.com |
+| Live    | https://app.planetexpress.com     |
+
+### Path
+
+All URIs follow this format:
+
+/ rest /`<version>` /`<resource>` **[** /`<resource ID>` **[** /`<subresource>` **[** /`<subresource ID>` **] ] ]**
+
+where **[** and **]** delimit optional sequence.
+
+<br/><br/>
+
+Here are some examples of **valid** URIs:
+
+- https://sandbox.planetexpress.com/rest/v1/status
+- https://app.planetexpress.com/rest/v1/item
+- https://sandbox.planetexpress.com/rest/v1/order/1
+- https://app.planetexpress.com/rest/v1/order/1/tracking
+
+And here are some URIs that are **not valid**:
+
+- https://sandbox.planetexpress.com/rest/status *(missing version)*
+- https://app.planetexpress.com/rest/v1/order/tracking *(missing resource ID)*
+
+## Authentication
+
+API authentication is performed using the **API token** you receive from our support. Note that **sandbox** and **live** APIs have **different** access tokens.
+
+<br/><br/>
+
+Preferred method of authentication is the **HTTP Authorization header**. The header should look like this:
+
+```
+
+Authorization: Bearer <your API token here>
+
+```
+
+You can also include the token in the request **URL**, like this:
+
+```
+
+https://sandbox.planetexpress.com/rest/v1/status?token=<your API token here>
+
+```
+<u>**which is, however, highly discouraged, because it exposes the API token in the URL and drastically increases the risk of credentials theft.**</u>
+
+## Response
+
+### Structure
+
+Each response comes wrapped in an "envelope" with some basic information like error messages or HTTP code.  
+Here is an example response (returned by */rest/v1/status*):
+
+```json
+{
+  "method": "GET",
+  "version": "V1",
+  "resource": "Status",
+  "subresource": "default",
+  "code": 200,
+  "messages": [],
+  "errors": [],
+  "collection": false,
+  "payload": []
+}
+```
+
+| Key         | Type   | Description                                                                            |
+|-------------|--------|----------------------------------------------------------------------------------------|
+| method      | string | HTTP method used by the request.                                                       |
+| version     | string | Requested API version.                                                                 |
+| resource    | string | Requested resource.                                                                    |
+| subresource | string | Requested sub-resource (*default* means no subresource).                               |
+| code        | int    | HTTP return code.                                                                      |
+| messages    | array  | Non-error messages (notices) from the API.                                             |
+| errors      | array  | Error messages from the API. Any error means request has failed.                       |
+| collection  | bool   | Indicates if the payload is a collection of resources or a single resource.            |
+| payload     | array  | Returned resource(s).                                                                  |
+
+
+### Codes
+
+HTTP return codes commonly used by the API:
+
+| Code | Meaning                                                                                                                         |
+|------|---------------------------------------------------------------------------------------------------------------------------------|
+| 200  | Request processed successfully. Note that this does not mean request itself succeeded, that is indicated by presence of errors. |
+| 201  | Request processed successfully and resource has been created.                                                                   |
+| 400  | Bad request (no request body for example).                                                                                      |
+| 401  | Authorization failed.                                                                                                           |
+| 403  | You are accessing a resource which you are not allowed to.                                                                      |
+| 404  | Invalid or unaccepted HTTP method, invalid or nonexistent API version, resource or subresource.                                 |
+| 500  | Server encountered an internal error.                                                                                           |
+
+## API status [/status]
+
+- Used to obtain information about the AP
+
+### Get API status [GET]
+
++ Request
+    + Headers
+    
+            Authorization: Bearer 5c7d022bb9c78_35603cbeb3f744d8283cee48d5af0ab635c00dec
+            
 + Response 200 (application/json)
 
-        [
-            {
-                "question": "Favourite programming language?",
-                "published_at": "2015-08-05T08:40:51.620Z",
-                "choices": [
-                    {
-                        "choice": "Swift",
-                        "votes": 2048
-                    }, {
-                        "choice": "Python",
-                        "votes": 1024
-                    }, {
-                        "choice": "Objective-C",
-                        "votes": 512
-                    }, {
-                        "choice": "Ruby",
-                        "votes": 256
-                    }
-                ]
-            }
-        ]
-
-### Create a New Question [POST]
-
-You may create your own question using this action. It takes a JSON
-object containing a question and a collection of answers in the
-form of choices.
-
-+ Request (application/json)
-
         {
-            "question": "Favourite programming language?",
-            "choices": [
-                "Swift",
-                "Python",
-                "Objective-C",
-                "Ruby"
-            ]
+          "method": "GET",
+          "version": "V1",
+          "resource": "Status",
+          "subresource": "default",
+          "code": 200,
+          "messages": [],
+          "errors": [],
+          "collection": false,
+          "payload": []
         }
-
-+ Response 201 (application/json)
-
-    + Headers
-
-            Location: /questions/2
-
-    + Body
-
-            {
-                "question": "Favourite programming language?",
-                "published_at": "2015-08-05T08:40:51.620Z",
-                "choices": [
-                    {
-                        "choice": "Swift",
-                        "votes": 0
-                    }, {
-                        "choice": "Python",
-                        "votes": 0
-                    }, {
-                        "choice": "Objective-C",
-                        "votes": 0
-                    }, {
-                        "choice": "Ruby",
-                        "votes": 0
-                    }
-                ]
-            }
