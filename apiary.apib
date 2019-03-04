@@ -3,9 +3,11 @@ HOST: https://app.planetexpress.com/rest/v1
 
 # Planet Expresss RESTful API
 
-## URI
+## Request
 
-### Host
+### URI
+
+#### Host
 
 Depending on which host you choose, either **sandbox** or **live** API will be contacted.
 
@@ -14,7 +16,7 @@ Depending on which host you choose, either **sandbox** or **live** API will be c
 | Sandbox | https://sandbox.planetexpress.com |
 | Live    | https://app.planetexpress.com     |
 
-### Path
+#### Path
 
 All URIs follow this format:
 
@@ -36,7 +38,7 @@ And here are some URIs that are **not valid**:
 - https://sandbox.planetexpress.com/rest/status *(missing version)*
 - https://app.planetexpress.com/rest/v1/order/tracking *(missing resource ID)*
 
-## Authentication
+### Authentication
 
 API authentication is performed using the **API token** you receive from our support. Note that **sandbox** and **live** APIs have **different** access tokens.
 
@@ -58,6 +60,15 @@ https://sandbox.planetexpress.com/rest/v1/status?token=<your API token here>
 
 ```
 <u>**which is, however, highly discouraged, because it exposes the API token in the URL and drastically increases the risk of credentials theft.**</u>
+
+### Accepted HTTP methods
+
+| Method | Description                              |
+|--------|------------------------------------------|
+| GET    | Used to obtain resources or collections. |
+| POST   | Used to create resources.                |
+| PUT    | Used to update resources.                |
+| DELETE | Used to delete resources.                |
 
 ## Response
 
@@ -93,7 +104,7 @@ Here is an example response (returned by */rest/v1/status*):
 | payload     | array  | Returned resource(s).                                                                  |
 
 
-### Codes
+### Response HTTP codes
 
 HTTP return codes commonly used by the API:
 
@@ -107,16 +118,16 @@ HTTP return codes commonly used by the API:
 | 404  | Invalid or unaccepted HTTP method, invalid or nonexistent API version, resource or subresource.                                 |
 | 500  | Server encountered an internal error.                                                                                           |
 
-## API status [/status]
+## Status [/status]
 
-- Used to obtain information about the AP
+- Used to obtain information about the API
 
 ### Get API status [GET]
 
 + Request
     + Headers
     
-            Authorization: Bearer 5c7d022bb9c78_35603cbeb3f744d8283cee48d5af0ab635c00dec
+            Authorization: Bearer <your API token>
             
 + Response 200 (application/json)
 
@@ -131,3 +142,1250 @@ HTTP return codes commonly used by the API:
           "collection": false,
           "payload": []
         }
+        
+## Item [/item]
+
+- Represents fulfillment storage item.
+
+### Get storage item collection [GET]
+
++ Request
+    + Headers
+    
+            Authorization: Bearer <your API token>
+        
++ Response 200 (application/json)
+        
+            {
+              "method": "GET",
+              "version": "V1",
+              "resource": "Item",
+              "subresource": "default",
+              "code": 200,
+              "messages": [],
+              "errors": [],
+              "collection": true,
+              "payload": [
+                {
+                  "id": 1,
+                  "sku": "123456",
+                  "name": "Item #1",
+                  "battery": "PI967",
+                  "value": 5.0,
+                  "is_package": false,
+                  "length": 1.1,
+                  "width": 2.2,
+                  "height": 3.3,
+                  "weight": 4.4,
+                  "valid_from": "2019-01-08T23:41:18+01:00",
+                  "valid_to": null,
+                  "total_amount": 6,
+                  "containers": [
+                    {
+                      "id": 1,
+                      "amount": 4
+                    },
+                    {
+                      "id": 2,
+                      "amount": 2
+                    }
+                  ],
+                  "declaration": {
+                    "category": null,
+                    "items": []
+                  },
+                  "links": [
+                    {
+                      "href": "/rest/v1/item/1",
+                      "rel": "self",
+                      "type": "GET"
+                    }
+                  ]
+                },
+                {
+                  "id": 2,
+                  "sku": "654321",
+                  "name": "Item #2",
+                  "battery": null,
+                  "value": 1.0,
+                  "is_package": true,
+                  "length": 1.1,
+                  "width": 2.2,
+                  "height": 3.3,
+                  "weight": 4.4,
+                  "valid_from": "2019-01-09T23:57:54+01:00",
+                  "valid_to": null,
+                  "total_amount": 10.0,
+                  "containers": [
+                    {
+                      "id": 3,
+                      "amount": 10
+                    }
+                  ],
+                  "declaration": {
+                    "category": "Merchandise",
+                    "items": [
+                      {
+                        "name": "Some item included in Item #2",
+                        "quantity": 1,
+                        "value": 100.0,
+                        "origin": "United States",
+                        "battery": "PI966"
+                      }
+                    ]
+                  },
+                  "links": [
+                    {
+                      "href": "/rest/v1/item/2",
+                      "rel": "self",
+                      "type": "GET"
+                    }
+                  ]
+                }
+              ]
+            }
+
+        
+### Get a single storage item [GET /item/{id}]
+
++ Parameters
+    + id (required, number, `1`) ... ID of the desired storage item.
+
++ Request
+    + Headers
+    
+            Authorization: Bearer <your API token>
+            
++ Response 200 (application/json)
+
+            {
+              "method": "GET",
+              "version": "V1",
+              "resource": "Item",
+              "subresource": "default",
+              "code": 200,
+              "messages": [],
+              "errors": [],
+              "collection": false,
+              "payload": {
+                "id": 1,
+                "sku": "123456",
+                "name": "Item #1",
+                "battery": "PI967",
+                "value": 5.0,
+                "is_package": false,
+                "length": 1.1,
+                "width": 2.2,
+                "height": 3.3,
+                "weight": 4.4,
+                "valid_from": "2019-01-08T23:41:18+01:00",
+                "valid_to": null,
+                "total_amount": 6,
+                "containers": [
+                  {
+                    "id": 1,
+                    "amount": 4
+                  },
+                  {
+                    "id": 2,
+                    "amount": 2
+                  }
+                ],
+                "declaration": {
+                  "category": null,
+                  "items": []
+                },
+                "links": [
+                  {
+                    "href": "/rest/v1/item/1",
+                    "rel": "self",
+                    "type": "GET"
+                  }
+                ]
+              }
+            }
+            
++ Response 404 (application/json)
+
+            {
+              "method": "GET",
+              "version": "V1",
+              "resource": "Item",
+              "subresource": "default",
+              "code": 404,
+              "messages": [],
+              "errors": [
+                "Item with ID '1' does not exist"
+              ],
+              "collection": false,
+              "payload": []
+            }
+
+## Carrier [/carrier]
+
+- Represents a shipping carrier.
+
+### Get carrier collection [GET]
+
++ Request
+    + Headers
+    
+            Authorization: Bearer <your API token>
+            
++ Response 200 (application/json)
+
+            {
+              "method": "GET",
+              "version": "V1",
+              "resource": "Carrier",
+              "subresource": "default",
+              "code": 200,
+              "messages": [],
+              "errors": [],
+              "collection": true,
+              "payload": [
+                {
+                  "id": 1,
+                  "name": "USPS",
+                  "service": "Priority",
+                  "estimated_delivery": "10-12 business days",
+                  "tracking": true,
+                  "tracking_note": "slow update",
+                  "links": [
+                    {
+                      "href": "/rest/v1/carrier/1",
+                      "rel": "self",
+                      "type": "GET"
+                    }
+                  ]
+                },
+                {
+                  "id": 2,
+                  "name": "USPS",
+                  "service": "Express",
+                  "estimated_delivery": "7-10 business days",
+                  "tracking": true,
+                  "tracking_note": "slow update",
+                  "links": [
+                    {
+                      "href": "/rest/v1/carrier/2",
+                      "rel": "self",
+                      "type": "GET"
+                    }
+                  ]
+                }
+              ]
+            }
+
+### Get a single carrier [GET /carrier/{id}]
+
++ Parameters
+    + id (required, number, `1`) ... ID of the desired carrier.
+
++ Request
+    + Headers
+    
+            Authorization: Bearer <your API token>
+            
++ Response 200 (application/json)
+
+            {
+              "method": "GET",
+              "version": "V1",
+              "resource": "Carrier",
+              "subresource": "default",
+              "code": 200,
+              "messages": [],
+              "errors": [],
+              "collection": false,
+              "payload": [
+                {
+                  "id": 1,
+                  "name": "USPS",
+                  "service": "Priority",
+                  "estimated_delivery": "10-12 business days",
+                  "tracking": true,
+                  "tracking_note": "slow update",
+                  "links": [
+                    {
+                      "href": "/rest/v1/carrier/1",
+                      "rel": "self",
+                      "type": "GET"
+                    }
+                  ]
+                }
+              ]
+            }
+            
++ Response 404 (application/json)
+
+            {
+              "method": "GET",
+              "version": "V1",
+              "resource": "Carrier",
+              "subresource": "default",
+              "code": 404,
+              "messages": [],
+              "errors": [
+                "Carrier with ID '1' does not exist"
+              ],
+              "collection": false,
+              "payload": []
+            }
+            
+## Address [/address]
+
+- Represents a client address used for shipping, billing, etc...
+
+### Get address collection [GET]
+
++ Request
+    + Headers
+    
+            Authorization: Bearer <your API token>
+            
++ Response 200 (application/json)
+
+            {
+              "method": "GET",
+              "version": "V1",
+              "resource": "Address",
+              "subresource": "default",
+              "code": 200,
+              "messages": [],
+              "errors": [],
+              "collection": true,
+              "payload": [
+                {
+                  "id": 1,
+                  "first_name": "John",
+                  "last_name": "Doe",
+                  "company_name": "Doe Entertainment LLC",
+                  "country_name": "United States",
+                  "country_iso": "US",
+                  "state_name": "Alabama",
+                  "state_iso": "AL",
+                  "address_line_1": "Foo street 42",
+                  "address_line_2": "Bar apartment",
+                  "city": "Gulf Shores",
+                  "zip": " 36542",
+                  "phone": "251-968-2784",
+                  "tax_id": "",
+                  "links": [
+                    {
+                      "href": "/rest/v1/address/1",
+                      "rel": "self",
+                      "type": "GET"
+                    }
+                  ]
+                },
+                {
+                  "id": 2,
+                  "first_name": "Jane",
+                  "last_name": "Doe",
+                  "company_name": null,
+                  "country_name": "Czech Republic",
+                  "country_iso": "CZ",
+                  "state_name": null,
+                  "state_iso": null,
+                  "address_line_1": "Husova 42",
+                  "address_line_2": null,
+                  "city": "Brno",
+                  "zip": "60200",
+                  "phone": "123 456 789",
+                  "tax_id": "29309743",
+                  "links": [
+                    {
+                      "href": "/rest/v1/address/2",
+                      "rel": "self",
+                      "type": "GET"
+                    }
+                  ]
+                }
+              ]
+            }
+    
+### Get a single address [GET /carrier/{id}]
+
++ Parameters
+    + id (required, number, `1`) ... ID of the desired address.
+    
++ Request
+    + Headers
+    
+            Authorization: Bearer <your API token>
+            
++ Response 200 (application/json)
+
+            {
+              "method": "GET",
+              "version": "V1",
+              "resource": "Address",
+              "subresource": "default",
+              "code": 200,
+              "messages": [],
+              "errors": [],
+              "collection": true,
+              "payload": [
+                {
+                  "id": 1,
+                  "first_name": "John",
+                  "last_name": "Doe",
+                  "company_name": "Doe Entertainment LLC",
+                  "country_name": "United States",
+                  "country_iso": "US",
+                  "state_name": "Alabama",
+                  "state_iso": "AL",
+                  "address_line_1": "Foo street 42",
+                  "address_line_2": "Bar apartment",
+                  "city": "Gulf Shores",
+                  "zip": " 36542",
+                  "phone": "251-968-2784",
+                  "tax_id": "",
+                  "links": [
+                    {
+                      "href": "/rest/v1/address/1",
+                      "rel": "self",
+                      "type": "GET"
+                    }
+                  ]
+                }
+              ]
+            }
+            
++ Response 404 (application/json)
+
+            {
+              "method": "GET",
+              "version": "V1",
+              "resource": "Address",
+              "subresource": "default",
+              "code": 404,
+              "messages": [],
+              "errors": [
+                "Address with ID '1' does not exist"
+              ],
+              "collection": false,
+              "payload": []
+            }
+            
+### Create a new address [POST]
++ Attributes
+    + first_name (optional, string) - Either **first name + last name** or **company name** has to be specified.
+    + last_name (optional, string) - Either **first name + last name** or **company name** has to be specified.
+    + company_name (optional, string) - Either **first name + last name** or **company name** has to be specified.
+    + address_line_1 (required, string)
+    + address_line_2 (optional, string)
+    + city (required, string)
+    + zip (required, string)
+    + country_name (optional, string) - Either **country name** or **country ISO** has to be specified.
+    + country_iso (optional, string) - Either **country name** or **country ISO** has to be specified.
+    + state_name (optional, string)
+    + state_iso (optional, string)
+    + phone (required, string)
+    + tax_id (optional, string)
+
++ Request (application/json)
+    + Headers
+        
+            Authorization: Bearer <your API token>
+                
+    + Body
+    
+            {
+              "first_name": "John",
+              "last_name": "Doe",
+              "company_name": "Doe Entertainment LLC",
+              "address_line_1": "Foo street 42",
+              "address_line_2": "Bar apartment",
+              "city": "Gulf Shores",
+              "zip": " 36542",
+              "country_iso": "US",
+              "state_iso": "AL",
+              "phone": "251-968-2784",
+            }
+            
++ Response 201 (application/json)
+    + Headers
+            
+            Location: /rest/v1/address/1
+            
+    + Body
+
+            {
+              "method": "POST",
+              "version": "V1",
+              "resource": "Address",
+              "subresource": "default",
+              "code": 201,
+              "messages": [],
+              "errors": [],
+              "collection": false,
+              "payload": [
+                {
+                  "id": 1,
+                  "first_name": "John",
+                  "last_name": "Doe",
+                  "company_name": "Doe Entertainment LLC",
+                  "country_name": "United States",
+                  "country_iso": "US",
+                  "state_name": "Alabama",
+                  "state_iso": "AL",
+                  "address_line_1": "Foo street 42",
+                  "address_line_2": "Bar apartment",
+                  "city": "Gulf Shores",
+                  "zip": " 36542",
+                  "phone": "251-968-2784",
+                  "tax_id": "",
+                  "links": [
+                    {
+                      "href": "/rest/v1/address/1",
+                      "rel": "self",
+                      "type": "GET"
+                    }
+                  ]
+                }
+              ]
+            }
+            
+
++ Response 200 (application/json)
+        
+            {
+              "method": "POST",
+              "version": "V1",
+              "resource": "Address",
+              "subresource": "default",
+              "code": 200,
+              "messages": [],
+              "errors": [
+                "Invalid combination of country and state"
+              ],
+              "collection": false,
+              "payload": []
+            }
+        
+## Order [/order]
+
+- Represents a fulfillment order. Client orders `Items` to be sent to a specific `Address` using selected `Carrier`.
+
+### Get order collection [GET]
+
++ Request
+    + Headers
+        
+            Authorization: Bearer <your API token>
+            
++ Response 200 (application/json)
+
+            {
+              "method": "GET",
+              "version": "V1",
+              "resource": "Order",
+              "subresource": "default",
+              "code": 200,
+              "messages": [],
+              "errors": [],
+              "collection": true,
+              "payload": [
+                {
+                  "id": 1,
+                  "carrier_id": 1,
+                  "address_id": 1,
+                  "status": "finished",
+                  "insurance": false,
+                  "promotional_inserts": false,
+                  "note": "",
+                  "carrier": "USPS: Priority",
+                  "items": [
+                    {
+                      "item_id": 1,
+                      "quantity": 2,
+                      "note": "Please remove packaging",
+                      "links": [
+                        {
+                          "href": "/rest/v1/item/1",
+                          "rel": "item",
+                          "type": "GET"
+                        }
+                      ]
+                    }
+                  ],
+                  "links": [
+                    {
+                      "href": "/rest/v1/order/1",
+                      "rel": "self",
+                      "type": "GET"
+                    },
+                    {
+                      "href": "/rest/v1/order/1/tracking",
+                      "rel": "tracking",
+                      "type": "GET"
+                    },
+                    {
+                      "href": "/rest/v1/address/1",
+                      "rel": "address",
+                      "type": "GET"
+                    },
+                    {
+                      "href": "/rest/v1/carrier/1",
+                      "rel": "carrier",
+                      "type": "GET"
+                    }
+                  ]
+                },
+                {
+                  "id": 2,
+                  "carrier_id": 2,
+                  "address_id": 2,
+                  "status": "created",
+                  "insurance": true,
+                  "promotional_inserts": false,
+                  "note": "Please hurry",
+                  "carrier": "Usps: Express",
+                  "items": [
+                    {
+                      "item_id": 1,
+                      "quantity": 2,
+                      "note": "",
+                      "links": [
+                        {
+                          "href": "/rest/v1/item/1",
+                          "rel": "item",
+                          "type": "GET"
+                        }
+                      ]
+                    },
+                    {
+                      "item_id": 2,
+                      "quantity": 1,
+                      "note": "",
+                      "links": [
+                        {
+                          "href": "/rest/v1/item/2",
+                          "rel": "item",
+                          "type": "GET"
+                        }
+                      ]
+                    }
+                  ],
+                  "links": [
+                    {
+                      "href": "/rest/v1/order/2",
+                      "rel": "self",
+                      "type": "GET"
+                    },
+                    {
+                      "href": "/rest/v1/order/2/tracking",
+                      "rel": "tracking",
+                      "type": "GET"
+                    },
+                    {
+                      "href": "/rest/v1/address/2",
+                      "rel": "address",
+                      "type": "GET"
+                    },
+                    {
+                      "href": "/rest/v1/carrier/2",
+                      "rel": "carrier",
+                      "type": "GET"
+                    }
+                  ]
+                }
+              ]
+            }
+
+### Get a single order [GET /order/{id}]
+
++ Parameters
+    + id (required, number, `1`) ... ID of the desired order.
+
++ Request
+    + Headers
+        
+            Authorization: Bearer <your API token>
+            
++ Response 200 (application/json)
+
+            {
+              "method": "GET",
+              "version": "V1",
+              "resource": "Order",
+              "subresource": "default",
+              "code": 200,
+              "messages": [],
+              "errors": [],
+              "collection": false,
+              "payload": [
+                {
+                  "id": 1,
+                  "carrier_id": 1,
+                  "address_id": 1,
+                  "status": "finished",
+                  "insurance": false,
+                  "promotional_inserts": false,
+                  "note": "",
+                  "carrier": "USPS: Priority",
+                  "items": [
+                    {
+                      "item_id": 1,
+                      "quantity": 2,
+                      "note": "Please remove packaging",
+                      "links": [
+                        {
+                          "href": "/rest/v1/item/1",
+                          "rel": "item",
+                          "type": "GET"
+                        }
+                      ]
+                    }
+                  ],
+                  "links": [
+                    {
+                      "href": "/rest/v1/order/1",
+                      "rel": "self",
+                      "type": "GET"
+                    },
+                    {
+                      "href": "/rest/v1/order/1/tracking",
+                      "rel": "tracking",
+                      "type": "GET"
+                    },
+                    {
+                      "href": "/rest/v1/address/1",
+                      "rel": "address",
+                      "type": "GET"
+                    },
+                    {
+                      "href": "/rest/v1/carrier/1",
+                      "rel": "carrier",
+                      "type": "GET"
+                    }
+                  ]
+                }
+              ]
+            }
+            
++ Response 404 (application/json)
+
+            {
+              "method": "GET",
+              "version": "V1",
+              "resource": "Order",
+              "subresource": "default",
+              "code": 404,
+              "messages": [],
+              "errors": [
+                "Order with ID '1' does not exist."
+              ],
+              "collection": false,
+              "payload": []
+            }
+            
+### Get tracking information for a single order [GET /order/{id}/tracking]
+
++ Parameters
+    + id (required, number, `1`) ... ID of the desired order.
+
++ Request
+    + Headers
+        
+            Authorization: Bearer <your API token>
+
++ Response 200 (application/json)
+
+            {
+              "method": "GET",
+              "version": "V1",
+              "resource": "Order",
+              "subresource": "tracking",
+              "code": 200,
+              "messages": [],
+              "errors": [],
+              "collection": false,
+              "payload": {
+                "id": 1,
+                "tracking_number": "PLANET123456789",
+                "tracking_url": "https://app.planetexpress.com/client/tracking/PLANET123456789",
+                "links": [
+                  {
+                    "href": "/rest/v1/order/1",
+                    "rel": "self",
+                    "type": "GET"
+                  }
+                ]
+              }
+            }
+
++ Response 200 (application/json)
+
+            {
+              "method": "GET",
+              "version": "V1",
+              "resource": "Order",
+              "subresource": "tracking",
+              "code": 200,
+              "messages": [
+                "Tracking number for this order is not available yet"
+              ],
+              "errors": [],
+              "collection": false,
+              "payload": {
+                "id": 1,
+                "tracking_number": null,
+                "tracking_url": null,
+                "links": [
+                  {
+                    "href": "/rest/v1/order/1",
+                    "rel": "self",
+                    "type": "GET"
+                  }
+                ]
+              }
+            }
+
+### Create a new order [POST /order/{id}]
+
++ Parameters
+    + id (required, number, `1`) ... ID of the desired order.
+    
++ Attributes
+    + carrier_id (required, number) - Selected carrier.
+    + address_id (required, number) - Selected recipient address.
+    + insurance (required, boolean) - Add insurance to your order?
+    + promotional_inserts (required, boolean) - Add promotional inserts to your order?
+    + note (optional, string) - Any notes for the order.
+    + items (required, array) -  Array of ordered items.
+        + array
+            + item_id (required, number) - ID of the desired item.
+            + quantity (required, number) - Ordered quantity.
+            + note (optional, string) - Any notes for this item.
+
++ Request (application/json)
+    + Headers
+            
+            Authorization: Bearer <your API token>
+            
+    + Body
+    
+            {
+              "carrier_id": 1,
+              "address_id": 1,
+              "insurance": false,
+              "promotional_inserts": false,
+              "note": "",
+              "items": [
+                {
+                  "item_id": 1,
+                  "quantity": 2,
+                  "note": "Please remove packaging",
+                }
+              ],
+ 
++ Response 201 (application/json)
+
+            {
+              "method": "POST",
+              "version": "V1",
+              "resource": "Order",
+              "subresource": "default",
+              "code": 200,
+              "messages": [],
+              "errors": [],
+              "collection": false,
+              "payload": [
+                {
+                  "id": 3,
+                  "carrier_id": 1,
+                  "address_id": 1,
+                  "status": "created",
+                  "insurance": false,
+                  "promotional_inserts": false,
+                  "note": "",
+                  "carrier": "USPS: Priority",
+                  "items": [
+                    {
+                      "item_id": 1,
+                      "quantity": 2,
+                      "note": "Please remove packaging",
+                      "links": [
+                        {
+                          "href": "/rest/v1/item/1",
+                          "rel": "item",
+                          "type": "GET"
+                        }
+                      ]
+                    }
+                  ],
+                  "links": [
+                    {
+                      "href": "/rest/v1/order/1",
+                      "rel": "self",
+                      "type": "GET"
+                    },
+                    {
+                      "href": "/rest/v1/order/1/tracking",
+                      "rel": "tracking",
+                      "type": "GET"
+                    },
+                    {
+                      "href": "/rest/v1/address/1",
+                      "rel": "address",
+                      "type": "GET"
+                    },
+                    {
+                      "href": "/rest/v1/carrier/1",
+                      "rel": "carrier",
+                      "type": "GET"
+                    }
+                  ]
+                }
+              ]
+            }
+
++ Response 200 (application/json)
+
+            {
+              "method": "PUT",
+              "version": "V1",
+              "resource": "Order",
+              "subresource": "default",
+              "code": 200,
+              "messages": [],
+              "errors": [
+                "Value 'zip' is missing"
+              ],
+              "collection": false,
+              "payload": []
+            }
+
++ Response 404 (application/json)
+
+            {
+              "method": "POST",
+              "version": "V1",
+              "resource": "Order",
+              "subresource": "default",
+              "code": 404,
+              "messages": [],
+              "errors": [
+                "Item with ID '1' does not exist."
+              ],
+              "collection": false,
+              "payload": []
+            }
+
+### Edit an existing order [PUT /order/{id}]
+
++ Parameters
+    + id (required, number, `3`) ... ID of the desired order.
+
++ Attributes
+    + carrier_id (optional, number) - Selected carrier.
+    + address_id (optional, number) - Selected recipient address.
+    + insurance (optional, boolean) - Add insurance to your order?
+    + promotional_inserts (optional, boolean) - Add promotional inserts to your order?
+    + note (optional, string) - Any notes for the order.
+    + items (optional, array) -  Array of ordered items.
+        + array
+            + item_id (optional, number) - ID of the desired item.
+            + quantity (optional, number) - Ordered quantity.
+            + note (optional, string) - Any notes for this item.
+
++ Request (application/json)
+    + Headers
+        
+            Authorization: Bearer <your API token>
+
+    + Body
+        
+            {
+              "note": "And please hurry"
+            }
+            
++ Response 200 (application/json)
+
+            {
+              "method": "POST",
+              "version": "V1",
+              "resource": "Order",
+              "subresource": "default",
+              "code": 200,
+              "messages": [],
+              "errors": [],
+              "collection": false,
+              "payload": [
+                {
+                  "id": 3,
+                  "carrier_id": 1,
+                  "address_id": 1,
+                  "status": "created",
+                  "insurance": false,
+                  "promotional_inserts": false,
+                  "note": "And please hurry",
+                  "carrier": "USPS: Priority",
+                  "items": [
+                    {
+                      "item_id": 1,
+                      "quantity": 2,
+                      "note": "Please remove packaging",
+                      "links": [
+                        {
+                          "href": "/rest/v1/item/1",
+                          "rel": "item",
+                          "type": "GET"
+                        }
+                      ]
+                    }
+                  ],
+                  "links": [
+                    {
+                      "href": "/rest/v1/order/1",
+                      "rel": "self",
+                      "type": "GET"
+                    },
+                    {
+                      "href": "/rest/v1/order/1/tracking",
+                      "rel": "tracking",
+                      "type": "GET"
+                    },
+                    {
+                      "href": "/rest/v1/address/1",
+                      "rel": "address",
+                      "type": "GET"
+                    },
+                    {
+                      "href": "/rest/v1/carrier/1",
+                      "rel": "carrier",
+                      "type": "GET"
+                    }
+                  ]
+                }
+              ]
+            }
+
++ Response 200 (application/json)
+
+            {
+              "method": "PUT",
+              "version": "V1",
+              "resource": "Order",
+              "subresource": "default",
+              "code": 200,
+              "messages": [],
+              "errors": [
+                "Value 'zip' is invalid"
+              ],
+              "collection": false,
+              "payload": []
+            }
+
++ Response 404 (application/json)
+
+            {
+              "method": "PUT",
+              "version": "V1",
+              "resource": "Order",
+              "subresource": "default",
+              "code": 404,
+              "messages": [],
+              "errors": [
+                "Order with ID '1' does not exist."
+              ],
+              "collection": false,
+              "payload": []
+            }
+
+### Cancel an order [DELETE /order/{id}]
+
++ Parameters
+    + id (required, number, `1`) ... ID of the desired order.
+
++ Request (application/json)
+    + Headers
+        
+            Authorization: Bearer <your API token>
+            
++ Response 200 (application/json)
+
+            {
+              "method": "DELETE",
+              "version": "V1",
+              "resource": "Order",
+              "subresource": "default",
+              "code": 200,
+              "messages": [],
+              "errors": [],
+              "collection": false,
+              "payload": {
+                "id": 1,
+                "status": "cancelled",
+                "links": [
+                  {
+                    "href": "/rest/v1/order/1",
+                    "rel": "self",
+                    "type": "GET"
+                  }
+                ]
+              }
+            }
+
++ Response 404 (application/json)
+
+            {
+              "method": "DELETE",
+              "version": "V1",
+              "resource": "Order",
+              "subresource": "default",
+              "code": 404,
+              "messages": [],
+              "errors": [
+                "Order with ID '1' does not exist."
+              ],
+              "collection": false,
+              "payload": []
+            }
+            
+## Order rate [/order-rate/{?address_id}{?items}]
+
+- Represents shipping information for an order.
+
++ Parameters
+    + address_id (required, number, `1`) ... Recipient address ID.
+    + items (required, array) ... Array of order items, each containing **item_id** and **quantity** (items[0][item_id]=2&items[0][quantity]=3&items[1][item_id]=...)
+
+### Get order rate collection [GET]
+
++ Request
+    + Headers
+        
+            Authorization: Bearer <your API token>
+            
++ Response 200 (application/json)
+
+            {
+              "method": "GET",
+              "version": "V1",
+              "resource": "OrderRate",
+              "subresource": "default",
+              "code": 200,
+              "messages": [
+                "All rates are estimated and in no way guaranteed for the final order!"
+              ],
+              "errors": [],
+              "collection": true,
+              "payload": [
+                {
+                  "id": 2,
+                  "name": "USPS",
+                  "service": "Express",
+                  "estimated_delivery": "7-10 business days",
+                  "tracking": true,
+                  "tracking_note": "slow update",
+                  "rate": 49.63,
+                  "insurance": 3.0,
+                  "currency": "USD",
+                  "links": [
+                    {
+                      "href": "/rest/v1/order-rate/2",
+                      "rel": "self",
+                      "type": "GET"
+                    },
+                    {
+                      "href": "/rest/v1/carrier/2",
+                      "rel": "self",
+                      "type": "GET"
+                    }
+                  ]
+                },
+                {
+                  "id": 4,
+                  "name": "Planet Mail",
+                  "service": "Express",
+                  "estimated_delivery": "17-25 business days",
+                  "tracking": true,
+                  "tracking_note": "basic tracking",
+                  "rate": 38.66,
+                  "insurance": 4.0,
+                  "currency": "USD",
+                  "links": [
+                    {
+                      "href": "/rest/v1/order-rate/4",
+                      "rel": "self",
+                      "type": "GET"
+                    },
+                    {
+                      "href": "/rest/v1/carrier/4",
+                      "rel": "self",
+                      "type": "GET"
+                    }
+                  ]
+                }
+              ]
+            }
+
+### Get a single order rate [GET /order-rate/{id}{?address_id}{?items}]
+
++ Parameters
+    + id (required, number, `1`) ... ID of the desired carrier.
+    + address_id (required, number, `1`) ... Recipient address ID.
+    + items (required, array) ... Array of order items, each containing **item_id** and **quantity** (items[0][item_id]=2&items[0][quantity]=3&items[1][item_id]=...)
+
++ Request
+    + Headers
+        
+            Authorization: Bearer <your API token>
+            
++ Response 200 (application/json)
+
+            {
+              "method": "GET",
+              "version": "V1",
+              "resource": "OrderRate",
+              "subresource": "default",
+              "code": 200,
+              "messages": [
+                "All rates are estimated and in no way guaranteed for the final order!"
+              ],
+              "errors": [],
+              "collection": false,
+              "payload": {
+                "id": 2,
+                "name": "USPS",
+                "service": "Express",
+                "estimated_delivery": "7-10 business days",
+                "tracking": true,
+                "tracking_note": "slow update",
+                "rate": 49.63,
+                "insurance": 3.0,
+                "currency": "USD",
+                "links": [
+                  {
+                    "href": "/rest/v1/order-rate/2",
+                    "rel": "self",
+                    "type": "GET"
+                  },
+                  {
+                    "href": "/rest/v1/carrier/2",
+                    "rel": "self",
+                    "type": "GET"
+                  }
+                ]
+              }
+            }
+            
++ Response 404 (application/json)
+
+            {
+              "method": "GET",
+              "version": "V1",
+              "resource": "OrderRate",
+              "subresource": "default",
+              "code": 404,
+              "messages": [],
+              "errors": [
+                "Order rate with ID '1' does not exist."
+              ],
+              "collection": false,
+              "payload": []
+            }
