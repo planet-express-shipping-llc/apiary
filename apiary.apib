@@ -142,7 +142,108 @@ HTTP return codes commonly used by the API:
           "collection": false,
           "payload": []
         }
-        
+
+## Warehouse [/warehouse]
+
+- Represents a warehouse location.
+
+### Get warehouse collection [GET]
+
++ Request
+    + Headers
+
+            Authorization: Bearer <your API token>
+
++ Response 200 (application/json)
+
+            {
+              "method": "GET",
+              "version": "V1",
+              "resource": "Warehouse",
+              "subresource": "default",
+              "code": 200,
+              "messages": [],
+              "errors": [],
+              "collection": true,
+              "payload": [
+                {
+                  "id": 1,
+                  "name": "California",
+                  "has_items": true,
+                  "links": [
+                    {
+                      "href": "/rest/v1/warehouse/1",
+                      "rel": "self",
+                      "type": "GET"
+                    }
+                  ]
+                },
+                {
+                  "id": 2,
+                  "name": "Oregon",
+                  "has_items": false,
+                  "links": [
+                    {
+                      "href": "/rest/v1/warehouse/2",
+                      "rel": "self",
+                      "type": "GET"
+                    }
+                  ]
+                }
+              ]
+            }
+
+### Get a single warehouse [GET /warehouse/{id}]
+
++ Parameters
+    + id (required, number, `1`) ... ID of the desired warehouse.
+
++ Request
+    + Headers
+
+            Authorization: Bearer <your API token>
+
++ Response 200 (application/json)
+
+            {
+              "method": "GET",
+              "version": "V1",
+              "resource": "Warehouse",
+              "subresource": "default",
+              "code": 200,
+              "messages": [],
+              "errors": [],
+              "collection": false,
+              "payload": {
+                "id": 1,
+                "name": "California",
+                "has_items": true,
+                "links": [
+                  {
+                    "href": "/rest/v1/warehouse/1",
+                    "rel": "self",
+                    "type": "GET"
+                  }
+                ]
+              }
+            }
+
++ Response 404 (application/json)
+
+            {
+              "method": "GET",
+              "version": "V1",
+              "resource": "Warehouse",
+              "subresource": "default",
+              "code": 404,
+              "messages": [],
+              "errors": [
+                "Warehouse with id '1' not found"
+              ],
+              "collection": false,
+              "payload": []
+            }
+
 ## Item [/item]
 
 - Represents fulfillment storage item.
@@ -151,11 +252,11 @@ HTTP return codes commonly used by the API:
 
 + Request
     + Headers
-    
+
             Authorization: Bearer <your API token>
-        
+
 + Response 200 (application/json)
-        
+
             {
               "method": "GET",
               "version": "V1",
@@ -183,11 +284,27 @@ HTTP return codes commonly used by the API:
                   "containers": [
                     {
                       "id": 1,
-                      "amount": 4
+                      "warehouse_id": 1,
+                      "amount": 4,
+                      "links": [
+                        {
+                          "href": "/rest/v1/warehouse/1",
+                          "rel": "warehouse",
+                          "type": "GET"
+                        }
+                      ]
                     },
                     {
                       "id": 2,
-                      "amount": 2
+                      "warehouse_id": 2,
+                      "amount": 2,
+                      "links": [
+                        {
+                          "href": "/rest/v1/warehouse/2",
+                          "rel": "warehouse",
+                          "type": "GET"
+                        }
+                      ]
                     }
                   ],
                   "declaration": {
@@ -219,7 +336,15 @@ HTTP return codes commonly used by the API:
                   "containers": [
                     {
                       "id": 3,
-                      "amount": 10
+                      "warehouse_id": 1,
+                      "amount": 10,
+                      "links": [
+                        {
+                          "href": "/rest/v1/warehouse/1",
+                          "rel": "warehouse",
+                          "type": "GET"
+                        }
+                      ]
                     }
                   ],
                   "declaration": {
@@ -245,7 +370,7 @@ HTTP return codes commonly used by the API:
               ]
             }
 
-        
+
 ### Get a single storage item [GET /item/{id}]
 
 + Parameters
@@ -253,9 +378,9 @@ HTTP return codes commonly used by the API:
 
 + Request
     + Headers
-    
+
             Authorization: Bearer <your API token>
-            
+
 + Response 200 (application/json)
 
             {
@@ -284,11 +409,27 @@ HTTP return codes commonly used by the API:
                 "containers": [
                   {
                     "id": 1,
-                    "amount": 4
+                    "warehouse_id": 1,
+                    "amount": 4,
+                    "links": [
+                      {
+                        "href": "/rest/v1/warehouse/1",
+                        "rel": "warehouse",
+                        "type": "GET"
+                      }
+                    ]
                   },
                   {
                     "id": 2,
-                    "amount": 2
+                    "warehouse_id": 2,
+                    "amount": 2,
+                    "links": [
+                      {
+                        "href": "/rest/v1/warehouse/2",
+                        "rel": "warehouse",
+                        "type": "GET"
+                      }
+                    ]
                   }
                 ],
                 "declaration": {
@@ -304,7 +445,7 @@ HTTP return codes commonly used by the API:
                 ]
               }
             }
-            
+
 + Response 404 (application/json)
 
             {
@@ -329,9 +470,9 @@ HTTP return codes commonly used by the API:
 
 + Request
     + Headers
-    
+
             Authorization: Bearer <your API token>
-            
+
 + Response 200 (application/json)
 
             {
@@ -384,9 +525,9 @@ HTTP return codes commonly used by the API:
 
 + Request
     + Headers
-    
+
             Authorization: Bearer <your API token>
-            
+
 + Response 200 (application/json)
 
             {
@@ -416,7 +557,7 @@ HTTP return codes commonly used by the API:
                 }
               ]
             }
-            
+
 + Response 404 (application/json)
 
             {
@@ -432,7 +573,7 @@ HTTP return codes commonly used by the API:
               "collection": false,
               "payload": []
             }
-            
+
 ## Address [/address]
 
 - Represents a client address used for shipping, billing, etc...
@@ -441,9 +582,9 @@ HTTP return codes commonly used by the API:
 
 + Request
     + Headers
-    
+
             Authorization: Bearer <your API token>
-            
+
 + Response 200 (application/json)
 
             {
@@ -504,17 +645,17 @@ HTTP return codes commonly used by the API:
                 }
               ]
             }
-    
-### Get a single address [GET /carrier/{id}]
+
+### Get a single address [GET /address/{id}]
 
 + Parameters
     + id (required, number, `1`) ... ID of the desired address.
-    
+
 + Request
     + Headers
-    
+
             Authorization: Bearer <your API token>
-            
+
 + Response 200 (application/json)
 
             {
@@ -552,7 +693,7 @@ HTTP return codes commonly used by the API:
                 }
               ]
             }
-            
+
 + Response 404 (application/json)
 
             {
@@ -568,7 +709,7 @@ HTTP return codes commonly used by the API:
               "collection": false,
               "payload": []
             }
-            
+
 ### Create a new address [POST]
 + Attributes
     + first_name (optional, string) - Either **first name + last name** or **company name** has to be specified.
@@ -587,11 +728,11 @@ HTTP return codes commonly used by the API:
 
 + Request (application/json)
     + Headers
-        
+
             Authorization: Bearer <your API token>
-                
+
     + Body
-    
+
             {
               "first_name": "John",
               "last_name": "Doe",
@@ -604,12 +745,12 @@ HTTP return codes commonly used by the API:
               "state_iso": "AL",
               "phone": "251-968-2784",
             }
-            
+
 + Response 201 (application/json)
     + Headers
-            
+
             Location: /rest/v1/address/1
-            
+
     + Body
 
             {
@@ -647,10 +788,10 @@ HTTP return codes commonly used by the API:
                 }
               ]
             }
-            
+
 
 + Response 200 (application/json)
-        
+
             {
               "method": "POST",
               "version": "V1",
@@ -664,7 +805,7 @@ HTTP return codes commonly used by the API:
               "collection": false,
               "payload": []
             }
-        
+
 ## Order [/order]
 
 - Represents a fulfillment order. Client orders `Items` to be sent to a specific `Address` using selected `Carrier`.
@@ -673,9 +814,9 @@ HTTP return codes commonly used by the API:
 
 + Request
     + Headers
-        
+
             Authorization: Bearer <your API token>
-            
+
 + Response 200 (application/json)
 
             {
@@ -690,6 +831,7 @@ HTTP return codes commonly used by the API:
               "payload": [
                 {
                   "id": 1,
+                  "warehouse_id": 1,
                   "carrier_id": 1,
                   "address_id": 1,
                   "status": "finished",
@@ -731,11 +873,17 @@ HTTP return codes commonly used by the API:
                       "href": "/rest/v1/carrier/1",
                       "rel": "carrier",
                       "type": "GET"
+                    },
+                    {
+                      "href": "/rest/v1/warehouse/1",
+                      "rel": "warehouse",
+                      "type": "GET"
                     }
                   ]
                 },
                 {
                   "id": 2,
+                  "warehouse_id": 1,
                   "carrier_id": 2,
                   "address_id": 2,
                   "status": "created",
@@ -789,6 +937,11 @@ HTTP return codes commonly used by the API:
                       "href": "/rest/v1/carrier/2",
                       "rel": "carrier",
                       "type": "GET"
+                    },
+                    {
+                      "href": "/rest/v1/warehouse/1",
+                      "rel": "warehouse",
+                      "type": "GET"
                     }
                   ]
                 }
@@ -802,9 +955,9 @@ HTTP return codes commonly used by the API:
 
 + Request
     + Headers
-        
+
             Authorization: Bearer <your API token>
-            
+
 + Response 200 (application/json)
 
             {
@@ -819,6 +972,7 @@ HTTP return codes commonly used by the API:
               "payload": [
                 {
                   "id": 1,
+                  "warehouse_id": 1,
                   "carrier_id": 1,
                   "address_id": 1,
                   "status": "finished",
@@ -860,12 +1014,17 @@ HTTP return codes commonly used by the API:
                       "href": "/rest/v1/carrier/1",
                       "rel": "carrier",
                       "type": "GET"
+                    },
+                    {
+                      "href": "/rest/v1/warehouse/1",
+                      "rel": "warehouse",
+                      "type": "GET"
                     }
                   ]
                 }
               ]
             }
-            
+
 + Response 404 (application/json)
 
             {
@@ -881,7 +1040,7 @@ HTTP return codes commonly used by the API:
               "collection": false,
               "payload": []
             }
-            
+
 ### Get tracking information for a single order [GET /order/{id}/tracking]
 
 + Parameters
@@ -889,7 +1048,7 @@ HTTP return codes commonly used by the API:
 
 + Request
     + Headers
-        
+
             Authorization: Bearer <your API token>
 
 + Response 200 (application/json)
@@ -944,12 +1103,10 @@ HTTP return codes commonly used by the API:
               }
             }
 
-### Create a new order [POST /order/{id}]
+### Create a new order [POST /order]
 
-+ Parameters
-    + id (required, number, `1`) ... ID of the desired order.
-    
 + Attributes
+    + warehouse_id (required, number) - Selected warehouse.
     + carrier_id (required, number) - Selected carrier.
     + address_id (required, number) - Selected recipient address.
     + insurance (required, boolean) - Add insurance to your order?
@@ -963,12 +1120,13 @@ HTTP return codes commonly used by the API:
 
 + Request (application/json)
     + Headers
-            
+
             Authorization: Bearer <your API token>
-            
+
     + Body
-    
+
             {
+              "warehouse_id": 1,
               "carrier_id": 1,
               "address_id": 1,
               "insurance": false,
@@ -981,7 +1139,8 @@ HTTP return codes commonly used by the API:
                   "note": "Please remove packaging",
                 }
               ],
- 
+            }
+
 + Response 201 (application/json)
 
             {
@@ -996,6 +1155,7 @@ HTTP return codes commonly used by the API:
               "payload": [
                 {
                   "id": 3,
+                  "warehouse_id": 1,
                   "carrier_id": 1,
                   "address_id": 1,
                   "status": "created",
@@ -1037,6 +1197,11 @@ HTTP return codes commonly used by the API:
                       "href": "/rest/v1/carrier/1",
                       "rel": "carrier",
                       "type": "GET"
+                    },
+                    {
+                      "href": "/rest/v1/warehouse/1",
+                      "rel": "warehouse",
+                      "type": "GET"
                     }
                   ]
                 }
@@ -1054,22 +1219,6 @@ HTTP return codes commonly used by the API:
               "messages": [],
               "errors": [
                 "Value 'zip' is missing"
-              ],
-              "collection": false,
-              "payload": []
-            }
-
-+ Response 404 (application/json)
-
-            {
-              "method": "POST",
-              "version": "V1",
-              "resource": "Order",
-              "subresource": "default",
-              "code": 404,
-              "messages": [],
-              "errors": [
-                "Item with ID '1' does not exist."
               ],
               "collection": false,
               "payload": []
@@ -1094,15 +1243,15 @@ HTTP return codes commonly used by the API:
 
 + Request (application/json)
     + Headers
-        
+
             Authorization: Bearer <your API token>
 
     + Body
-        
+
             {
               "note": "And please hurry"
             }
-            
+
 + Response 200 (application/json)
 
             {
@@ -1180,22 +1329,6 @@ HTTP return codes commonly used by the API:
               "payload": []
             }
 
-+ Response 404 (application/json)
-
-            {
-              "method": "PUT",
-              "version": "V1",
-              "resource": "Order",
-              "subresource": "default",
-              "code": 404,
-              "messages": [],
-              "errors": [
-                "Order with ID '1' does not exist."
-              ],
-              "collection": false,
-              "payload": []
-            }
-
 ### Cancel an order [DELETE /order/{id}]
 
 + Parameters
@@ -1203,9 +1336,9 @@ HTTP return codes commonly used by the API:
 
 + Request (application/json)
     + Headers
-        
+
             Authorization: Bearer <your API token>
-            
+
 + Response 200 (application/json)
 
             {
@@ -1228,22 +1361,6 @@ HTTP return codes commonly used by the API:
                   }
                 ]
               }
-            }
-
-+ Response 404 (application/json)
-
-            {
-              "method": "DELETE",
-              "version": "V1",
-              "resource": "Order",
-              "subresource": "default",
-              "code": 404,
-              "messages": [],
-              "errors": [
-                "Order with ID '1' does not exist."
-              ],
-              "collection": false,
-              "payload": []
             }
             
 ## Order rate [/order-rate/{?address_id}{?items}]
