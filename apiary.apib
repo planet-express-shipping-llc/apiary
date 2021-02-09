@@ -1512,6 +1512,9 @@ HTTP return codes commonly used by the API:
 ## User [/user]
 
 - Represents a Planet Express client.
+- It is **your responsibility** to make sure that the authentication endpoint is **not abused**.
+  - It is **highly recommended** to prevent user from trying to log in after three unsuccessful attempts.
+  - If you try to authenticate a user **unsuccessfully five times within an hour**, the user **will not be able to be authenticated** by the API for an hour after the fifth unsuccessful attempt.
 
 ### Get a single user [GET /user/{id}]
 
