@@ -52,14 +52,16 @@ Authorization: Bearer <your API token here>
 
 ```
 
-You can also include the token in the request **URL**, like this:
+<s><i>You can also include the token in the request **URL**, like this:</i></s>
 
 ```
 
 https://sandbox.planetexpress.com/rest/v1/status?token=<your API token here>
 
 ```
-<u>**which is, however, highly discouraged, because it exposes the API token in the URL and drastically increases the risk of credentials theft.**</u>
+<s><i>which is, however, highly discouraged, because it exposes the API token in the URL and drastically increases the risk of credentials theft.</i></s>
+
+This method is no longer supported.
 
 ### Accepted HTTP methods
 
@@ -1502,6 +1504,220 @@ HTTP return codes commonly used by the API:
               "messages": [],
               "errors": [
                 "Order rate with ID '1' does not exist."
+              ],
+              "collection": false,
+              "payload": []
+            }
+            
+## User [/user]
+
+- Represents a Planet Express client.
+
+### Get a single user [GET /user/{id}]
+
++ Parameters
+    + id (required, number) ... ID of the desired user.
+
++ Request (application/json)
+    + Headers
+
+            Authorization: Bearer <your API token>
+
++ Response 200 (application/json)
+
+            {
+              "method": "GET",
+              "version": "V1",
+              "resource": "User",
+              "subresource": "default",
+              "code": 200,
+              "messages": [],
+              "errors": [],
+              "collection": false,
+              "payload": {
+                "id": 42,
+                "email": "email@email.email",
+                "firstName": "John",
+                "lastName": "Doe",
+                "country": "US",
+                "locale": "en-US",
+                "links": [
+                  {
+                    "href": "/rest/v1/user/42",
+                    "rel": "self",
+                    "type": "GET"
+                  }
+                ]
+              }
+            }
+
++ Response 404 (application/json)
+            
+            {
+              "method": "GET",
+              "version": "V1",
+              "resource": "User",
+              "subresource": "default",
+              "code": 404,
+              "messages": [],
+              "errors": [
+                "User with ID 42 not found"
+              ],
+              "collection": false,
+              "payload": []
+            }
+            
+### Authenticate user [POST /user/auth]
+
++ Attributes
+    + email (required, string) - User email
+    + password (required, string) - User password
+    
++ Request (application/json)
+    + Headers
+
+            Authorization: Bearer <your API token>
+            
++ Response 200 (application/json)
+
+            {
+              "method": "POST",
+              "version": "V1",
+              "resource": "User",
+              "subresource": "auth",
+              "code": 200,
+              "messages": [],
+              "errors": [],
+              "collection": false,
+              "payload": {
+                "id": 42,
+                "email": "email@email.email",
+                "firstName": "John",
+                "lastName": "Doe",
+                "country": "US",
+                "locale": "en-US",
+                "links": [
+                  {
+                    "href": "/rest/v1/user/42",
+                    "rel": "self",
+                    "type": "GET"
+                  }
+                ]
+              }
+            }
+            
++ Response 400 (application/json)
+
+            {
+              "method": "POST",
+              "version": "V1",
+              "resource": "User",
+              "subresource": "auth",
+              "code": 400,
+              "messages": [],
+              "errors": [
+                "The password is incorrect."
+              ],
+              "collection": false,
+              "payload": []
+            }
+            
+## Deposit [/deposit]
+
+- Represents the deposit balance of a Planet Express client.
+- Deposit amounts are returned and passed as an **integer** representing the amount **in US cents**.
+- When adding deposit, positive amount meants deposit is **added**, negative amount means deposit is **subtracted**.
+
+### Get deposit of a single user [GET /deposit/{id}]
+
++ Parameters
+    + id (required, number) ... ID of the desired user.
+
++ Request (application/json)
+    + Headers
+
+            Authorization: Bearer <your API token>
+
++ Response 200 (application/json)
+
+            {
+              "method": "GET",
+              "version": "V1",
+              "resource": "Deposit",
+              "subresource": "default",
+              "code": 200,
+              "messages": [],
+              "errors": [],
+              "collection": false,
+              "payload": {
+                "amount": 1000,
+                "links": [
+                  {
+                    "href": "/rest/v1/deposit/42",
+                    "rel": "self",
+                    "type": "GET"
+                  }
+                ]
+              }
+            }
+            
++ Response 404 (application/json)
+            
+            {
+              "method": "GET",
+              "version": "V1",
+              "resource": "Deposit",
+              "subresource": "default",
+              "code": 404,
+              "messages": [],
+              "errors": [
+                "User with ID 42 not found"
+              ],
+              "collection": false,
+              "payload": []
+            }
+            
+### Add deposit to a single user [POST /deposit/{id}/add]
+
++ Parameters
+    + id (required, number) ... ID of the desired user.
+    
++ Attributes
+    + amount (required, number) - Amount to add/subtract
+    + note (optional, string) - Note for the client
+
++ Request (application/json)
+    + Headers
+
+            Authorization: Bearer <your API token>
+
++ Response 200 (application/json)
+
+            {
+              "method": "POST",
+              "version": "V1",
+              "resource": "Deposit",
+              "subresource": "add",
+              "code": 200,
+              "messages": [
+                "Deposit amount has been added/subtracted: 50"
+              ],
+              "errors": [],
+              "collection": false,
+              "payload": []
+            }
+            
++ Response 404 (application/json)
+
+            {
+              "method": "POST",
+              "version": "V1",
+              "resource": "Deposit",
+              "subresource": "add",
+              "code": 404,
+              "messages": [],
+              "errors": [
+                "User with ID 42 not found"
               ],
               "collection": false,
               "payload": []
